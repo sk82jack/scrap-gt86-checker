@@ -2,5 +2,5 @@
 # package>=version
 
 requests
-beautifulsoup
+bs4
 lxml
