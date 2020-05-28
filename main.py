@@ -15,10 +15,14 @@ def scrap_gt86_checker(data, context):
     for products_grid in soup.find_all('ul', {'class': 'products-grid'}):
         for item in products_grid.find_all('li'):
             car = item.h2.a
-            if not any(x['URL'] == car.attrs['href'] for x in entities):
-                entity = datastore.Entity(client.key(kind, car.attrs['href']))
+            URL = car.attrs['href']
+            if not any(x['URL'] == URL for x in entities):
+                entity = datastore.Entity(client.key(kind, URL))
                 entity.update({
                     'title': car.attrs['title'],
-                    'URL': car.attrs['href'],
+                    'URL': URL,
                 })
                 client.put(entity)
+
+                message = f'URL added: {URL}'
+                print(message)
