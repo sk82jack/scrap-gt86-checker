@@ -9,12 +9,13 @@ def scrap_gt86_checker(data, context):
     client = datastore.Client()
     kind = 'gt86-scrap-checker'
 
-    for products_grid in soup.find_all('ul', {'class': 'products-grid'}):
-        for item in products_grid.find_all('li'):
-            car = item.h2.a
-            # print(car.attrs['title'])
-            # print (car.attrs['href'])
+    query = client.query(kind=kind)
+    entities = list(query.fetch())
 
+for products_grid in soup.find_all('ul', {'class': 'products-grid'}):
+    for item in products_grid.find_all('li'):
+        car = item.h2.a
+        if not any(x['URL'] == car.attrs['href'] for x in entities):
             entity = datastore.Entity(client.key(kind, car.attrs['href']))
             entity.update({
                 'title': car.attrs['title'],
